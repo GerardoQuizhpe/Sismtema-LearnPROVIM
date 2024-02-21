@@ -4,11 +4,12 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import javax.swing.JOptionPane;
+import java.sql.*;
 
 public class AgentePerfilUsuario extends Agent {
 
     private ConexionBD conexionBD;
-    private String agenteRecomendacion = "AgenteRecomendacion";
+    private String agenteRecomendacionBasadaContenido = "AgenteRecomendacionBasadaContenido";
 
     @Override
     protected void setup() {
@@ -24,7 +25,6 @@ public class AgentePerfilUsuario extends Agent {
                     ACLMessage msg = receive();
                     if (msg != null) {
                         // Maneja el mensaje recibido
-
                         if (msg.getPerformative() == ACLMessage.INFORM) {
                             // Muestra la recomendación en la interfaz de usuario
                             mostrarRecomendacion(msg.getContent());
@@ -34,11 +34,10 @@ public class AgentePerfilUsuario extends Agent {
                     }
                 }
             });
-            //String nombreEstudiante = msg.getContent();
             String nivelEstudiante = conexionBD.obtenerNivelEstudiante(nombreEstudiante);
 
-            // Envía el nivel al RecomendacionAgente
-            enviarNivelAlRecomendacion(nivelEstudiante);
+            // Envía el nivel al AgenteRecomendacionBasadaComponentes
+            enviarNivelAlRecomendacionBasadaComponentes(nivelEstudiante);
         } else {
             // Si el estudiante no está registrado, mostrar un mensaje y finalizar el agente
             JOptionPane.showMessageDialog(null, "El estudiante no está registrado en la base de datos");
@@ -47,33 +46,19 @@ public class AgentePerfilUsuario extends Agent {
     }
 
     private String obtenerNombreEstudiante() {
-        // Puedes optar por obtener el nombre por consola o mediante JOptionPane
-        // Aquí presento ambas opciones:
-
-        // Opción 1: Obtener el nombre por consola
-        // System.out.print("Ingrese el nombre del estudiante: ");
-        // return new Scanner(System.in).nextLine();
-        // Opción 2: Obtener el nombre mediante JOptionPane
         return JOptionPane.showInputDialog("Ingrese el nombre del estudiante:");
     }
 
-    private void enviarNivelAlRecomendacion(String nivel) {
-        // Envía el nivel al RecomendacionAgente (puedes ajustar los destinatarios según tu sistema)
+    private void enviarNivelAlRecomendacionBasadaComponentes(String nivel) {
+        // Envía el nivel al AgenteRecomendacionBasadaComponentes
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setContent(nivel);
-        msg.addReceiver(getAID(agenteRecomendacion));
+        msg.addReceiver(getAID(agenteRecomendacionBasadaContenido));
         send(msg);
     }
 
     // Método para mostrar la recomendación en la interfaz de usuario mediante JOptionPane
     public void mostrarRecomendacion(String recomendacion) {
         JOptionPane.showMessageDialog(null, recomendacion);
-    }
-
-    protected void takeDown() {
-        // Cerrar la conexión a la base de datos al terminar el agente
-        if (conexionBD != null) {
-            conexionBD.cerrarConexion();
-        }
     }
 }
