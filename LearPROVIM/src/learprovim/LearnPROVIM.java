@@ -17,10 +17,10 @@ public class LearnPROVIM {
         ContainerController container = runtime.createMainContainer(profile);
 
         // Iniciar agentes
-        AgentController agentePerfilUsuario = container.createNewAgent("AgentePerfilUsuario", "learnprovim.AgentePerfilUsuario", new Object[]{});
+        AgentController agentePerfilUsuario = container.createNewAgent("AgentePerfilUsuario", "learprovim.AgentePerfilUsuario", new Object[]{});
         agentePerfilUsuario.start();
         
-        AgentController agenteRecomendacion  = container.createNewAgent("AgenteRecomendacionBasadaContenido", "learnprovim.AgenteRecomendacionBasadaContenido", new Object[]{});
+        AgentController agenteRecomendacion  = container.createNewAgent("AgenteRecomendacionBasadoContenido", "learprovim.AgenteRecomendacionBasadoContenido", new Object[]{});
         agenteRecomendacion.start();
     }
 }

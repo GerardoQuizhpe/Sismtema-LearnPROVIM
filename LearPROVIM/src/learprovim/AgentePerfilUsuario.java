@@ -9,7 +9,7 @@ import java.sql.*;
 public class AgentePerfilUsuario extends Agent {
 
     private ConexionBD conexionBD;
-    private String agenteRecomendacionBasadaContenido = "AgenteRecomendacionBasadaContenido";
+    private String agenteRecomendacionBasadoContenido = "AgenteRecomendacionBasadoContenido";
 
     @Override
     protected void setup() {
@@ -53,7 +53,7 @@ public class AgentePerfilUsuario extends Agent {
         // Envía el nivel al AgenteRecomendacionBasadaComponentes
         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
         msg.setContent(nivel);
-        msg.addReceiver(getAID(agenteRecomendacionBasadaContenido));
+        msg.addReceiver(getAID(agenteRecomendacionBasadoContenido));
         send(msg);
     }
 
